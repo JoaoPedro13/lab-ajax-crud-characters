@@ -6,7 +6,6 @@ const $characterContainer = document.querySelector('.characters-container');
 
 window.addEventListener('load', () => {
   document.getElementById('fetch-all').addEventListener('click', function (event) {    
-    
     charactersAPI.getFullList()
     .then(characters => {
       $characterContainer.innerHTML = "";
@@ -47,17 +46,51 @@ window.addEventListener('load', () => {
 
   document.getElementById('delete-one').addEventListener('click', function (event) {
     const characterId = document.querySelector('[name=character-id-delete]').value;
+    const button = document.getElementById('delete-one');
+    
     charactersAPI.deleteOneRegister(characterId)
+    .then(() => {
+      button.style.backgroundColor = 'green';
+    })
     .catch(error => {
+      button.style.backgroundColor = 'red';
       console.log("error deleteOneRegister ", error);
     })
   });
-
+  
   document.getElementById('edit-character-form').addEventListener('submit', function (event) {
-
+    const characterId = document.querySelector('[name=chr-id]').value;
+    const button = document.getElementById('send-data');
+    charactersAPI.updateOneRegister(characterId, {
+      "name": document.querySelector('#edit-character-form input[name="name"]').value,
+      "occupation": document.querySelector('#edit-character-form input[name="occupation"]').value,
+      "weapon": document.querySelector('#edit-character-form input[name="weapon"]').value,
+      "cartoon": document.querySelector('#edit-character-form input[name="cartoon"]').checked
+    })
+    .then(() => {
+      button.style.backgroundColor = "green";
+     })
+     .catch(error => {
+       button.style.backgroundColor = "red";
+      console.log('error updateOneRegister', error);
+     });
   });
-
+  
   document.getElementById('new-character-form').addEventListener('submit', function (event) {
-
+    const button = document.getElementById('send-data');
+    charactersAPI.createOneRegister({   
+      "id": charactersAPI.length + 1,
+      "name": document.querySelector('#new-character-form input[name="name"]').value,
+      "occupation": document.querySelector('#new-character-form input[name="occupation"]').value,
+      "weapon": document.querySelector('#new-character-form input[name="weapon"]').value,
+      "cartoon": document.querySelector('#new-character-form input[name="cartoon"]').checked
+    })
+    .then(() => {
+     button.style.backgroundColor = "green";
+    })
+    .catch(error => {
+      button.style.backgroundColor = "red";
+     console.log('error createOneRegister', error);
+    });
   });
 });

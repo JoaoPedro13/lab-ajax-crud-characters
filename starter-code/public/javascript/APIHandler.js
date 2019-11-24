@@ -20,10 +20,7 @@ class APIHandler {
   }
 
   createOneRegister (data) {
-    return this.instance.post('/characters', {
-      ...data,
-      id: Math.floor(Math.random() * 100000)
-    })
+    return this.instance.post('/characters', data)
     .then(response => Promise.resolve(response.data));
   }
 
